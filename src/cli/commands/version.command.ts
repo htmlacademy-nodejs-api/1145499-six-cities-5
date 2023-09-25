@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { ICommand } from './command.interface.js';
@@ -37,7 +38,7 @@ export class VersionCommand implements ICommand {
   public execute(): void {
     try {
       const version = this.readVersion();
-      console.info(version);
+      console.info(chalk.green(version));
     } catch (error: unknown) {
       console.error(`Failed to read version from ${this.filePath}`);
 
