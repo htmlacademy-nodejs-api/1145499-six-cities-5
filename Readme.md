@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Андрей Филиппов](https://up.htmlacademy.ru/nodejs-api/5/user/1145499).
-* Наставник: `Неизвестно`.
+- Студент: [Андрей Филиппов](https://up.htmlacademy.ru/nodejs-api/5/user/1145499).
+- Наставник: [Ярослав Денисенко](https://htmlacademy.ru/profile/id2412489).
 
 ---
 
