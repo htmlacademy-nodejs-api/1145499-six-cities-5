@@ -1,6 +1,5 @@
 import { ICommand } from './command.interface.js';
-import { CommandName } from './constants.js';
-
+import { CommandName } from '../../shared/types/command.enum.js';
 
 export class HelpCommand implements ICommand {
   public getName(): string {
