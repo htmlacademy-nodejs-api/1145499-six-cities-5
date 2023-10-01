@@ -8,8 +8,8 @@ export type HousingOffer = {
   description: string;
   createdDate: Date;
   city: string;
-  previewImg: string;
-  generalImg: string;
+  previewImage: string;
+  generalImage: string;
   isPremium: boolean;
   isFavorite: boolean;
   rating: number;
