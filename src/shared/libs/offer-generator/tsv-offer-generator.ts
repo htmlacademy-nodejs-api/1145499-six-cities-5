@@ -1,12 +1,8 @@
 import dayjs from 'dayjs';
 import { IOfferGenerator } from './offer-generator.interface.js';
 import { MockServerData, UserType } from '../../types/index.js';
-import {
-  generateRandomValue,
-  getRandomItem,
-  getRandomItems,
-  CitiesMap,
-} from '../../helpers/index.js';
+import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
+import { CitiesMap } from '../../constants/index.js';
 
 const MIN_COST = 100;
 const MAX_COST = 100000;
