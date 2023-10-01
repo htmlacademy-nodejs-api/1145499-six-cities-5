@@ -4,7 +4,7 @@
 /lib/
 /dist/
 /docs/
-.idea/*
+.idea
 
 .DS_Store
 coverage
