@@ -3,7 +3,7 @@ import { ICommand } from './command.interface.js';
 import { TSVOfferGenerator } from '../../shared/libs/offer-generator/index.js';
 import { TSVFileWriter } from '../../shared/libs/file-writer/index.js';
 import { getErrorMessage } from '../../shared/helpers/index.js';
-import { MockServerData } from '../../shared/types/index.js';
+import { CommandName, MockServerData } from '../../shared/types/index.js';
 
 export class GenerateCommand implements ICommand {
   private initialData: MockServerData;
@@ -26,7 +26,7 @@ export class GenerateCommand implements ICommand {
   }
 
   public getName(): string {
-    return '--generate';
+    return `--${CommandName.GENERATE}`;
   }
 
   public async execute(...parameters: string[]): Promise<void> {

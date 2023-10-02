@@ -2,7 +2,7 @@ import { getErrorMessage } from '../../shared/helpers/common.js';
 import { createHousingOffer } from '../../shared/helpers/createHousingOffer.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/tsv-file-reader.js';
 import { ICommand } from './command.interface.js';
-import { CommandName } from '../../shared/types/command.enum.js';
+import { CommandName } from '../../shared/types/command-name.enum.js';
 
 export class ImportCommand implements ICommand {
   public getName(): string {
