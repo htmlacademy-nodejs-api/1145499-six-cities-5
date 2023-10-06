@@ -50,7 +50,7 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
       name: userName,
       email: userEmail,
       avatar: userAvatar,
-      password: userPassword,
+      _password: userPassword,
       type: UserType[userType as keyof typeof UserType],
     },
     commentsTotal: Number.parseInt(commentsTotal, 10),
