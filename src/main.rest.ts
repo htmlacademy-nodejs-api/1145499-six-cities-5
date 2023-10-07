@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { RestApplication } from './rest/index.js';
 import { Component } from './shared/types/index.js';
+import { RestApplication } from './rest/index.js';
 import { createRestApplicationContainer } from './rest/rest.container.js';
 import { createUserContainer } from './shared/modules/user/user.container.js';
 import { createHousingOfferContainer } from './shared/modules/housing-offer/housing-offer.container.js';
