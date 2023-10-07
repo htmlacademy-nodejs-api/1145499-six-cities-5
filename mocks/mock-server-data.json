@@ -25,7 +25,7 @@
       "Светлая и просторная трехкомнатная квартира - отличный выбор для больших семей или компаний друзей, которые хотят арендовать жилье на долгий срок."
     ],
     "cities": ["Paris", "Cologne", "Brussels", "Amsterdam", "Hamburg", "Dusseldorf"],
-    "previewImages": [
+    "previewPhotos": [
       "preview-image-1.jpg",
       "preview-image-2.jpg",
       "preview-image-3.jpg",
@@ -33,7 +33,7 @@
       "preview-image-5.jpg",
       "preview-image-6.jpg"
     ],
-    "generalImages": [
+    "photos": [
       "general-image-1.jpg",
       "general-image-2.jpg",
       "general-image-3.jpg",

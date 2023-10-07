@@ -6,10 +6,9 @@ import { User } from './user.type.js';
 export type HousingOffer = {
   title: string;
   description: string;
-  createdDate: Date;
   city: string;
-  previewImage: string;
-  generalImage: string;
+  previewPhoto: string;
+  photos: string[];
   isPremium: boolean;
   isFavorite: boolean;
   rating: number;
@@ -18,7 +17,7 @@ export type HousingOffer = {
   guests: number;
   cost: number;
   features: HousingFeature[];
-  author: User;
+  user: User;
   commentsTotal: number;
   geo: Geo;
 };
