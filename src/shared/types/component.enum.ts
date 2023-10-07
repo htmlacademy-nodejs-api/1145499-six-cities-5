@@ -5,4 +5,6 @@ export const Component = {
   DatabaseClient: Symbol.for('DatabaseClient'),
   UserService: Symbol.for('UserService'),
   UserModel: Symbol.for('UserModel'),
+  HousingOfferService: Symbol.for('HousingOfferService'),
+  HousingOfferModel: Symbol.for('HousingOfferModel'),
 } as const;
