@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  db:
+    image: mongo:4.2
+    restart: always
+    container_name: buy-and-sell_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 27017:27017
+    volumes:
+      - buy-and-sell_data:/data/db
+volumes:
+  buy-and-sell_data:

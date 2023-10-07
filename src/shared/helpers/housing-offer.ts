@@ -7,10 +7,9 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
   const [
     title,
     description,
-    createdDate,
     city,
-    previewImage,
-    generalImage,
+    previewPhoto,
+    photos,
     isPremium,
     isFavorite,
     rating,
@@ -32,10 +31,9 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
   return {
     title,
     description,
-    createdDate: new Date(createdDate),
     city,
-    previewImage,
-    generalImage,
+    previewPhoto,
+    photos: photos.split(';'),
     isPremium: isPremium === 'true',
     isFavorite: isFavorite === 'true',
     rating: Number.parseInt(rating, 10),
@@ -46,11 +44,11 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
     features: features
       .split(';')
       .map((feature) => HousingFeature[feature as keyof typeof HousingFeature]),
-    author: {
+    user: {
       name: userName,
       email: userEmail,
       avatar: userAvatar,
-      password: userPassword,
+      _password: userPassword,
       type: UserType[userType as keyof typeof UserType],
     },
     commentsTotal: Number.parseInt(commentsTotal, 10),
