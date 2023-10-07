@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { IOfferGenerator } from './offer-generator.interface.js';
 import { MockServerData, UserType } from '../../types/index.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
@@ -19,9 +18,6 @@ const MAX_GUESTS = 10;
 const MIN_COMMENTS = 1;
 const MAX_COMMENTS = 5;
 
-const FIRST_WEEK_DAY = 1;
-const LAST_WEEK_DAY = 7;
-
 export class TSVOfferGenerator implements IOfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
 
@@ -29,8 +25,8 @@ export class TSVOfferGenerator implements IOfferGenerator {
     const title = getRandomItem(this.mockData.titles);
     const description = getRandomItem(this.mockData.descriptions);
     const city = getRandomItem(this.mockData.cities);
-    const previewImage = getRandomItem(this.mockData.previewImages);
-    const generalImage = getRandomItem(this.mockData.generalImages);
+    const previewPhoto = getRandomItem(this.mockData.previewPhotos);
+    const photos = getRandomItems(this.mockData.photos).join(';');
     const isPremium = getRandomItem(['true', 'false']);
     const isFavorite = getRandomItem(['true', 'false']);
     const rating = generateRandomValue(MIN_RATING, MAX_RATING).toString();
@@ -48,17 +44,12 @@ export class TSVOfferGenerator implements IOfferGenerator {
     const latitude = CitiesMap[city as keyof typeof CitiesMap]?.latitude;
     const longitude = CitiesMap[city as keyof typeof CitiesMap]?.longitude;
 
-    const createdDate = dayjs()
-      .subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
-      .toISOString();
-
     return [
       title,
       description,
-      createdDate,
       city,
-      previewImage,
-      generalImage,
+      previewPhoto,
+      photos,
       isPremium,
       isFavorite,
       rating,
