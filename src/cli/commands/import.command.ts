@@ -8,7 +8,7 @@ import {
   HousingOfferModel,
 } from '../../shared/modules/housing-offer/index.js';
 import { IDatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
-import { ILogger, PinoLogger } from '../../shared/libs/logger/index.js';
+import { ILogger, ConsoleLogger } from '../../shared/libs/logger/index.js';
 import { DefaultUserService, UserModel, IUserService } from '../../shared/modules/user/index.js';
 
 export class ImportCommand implements ICommand {
@@ -22,7 +22,7 @@ export class ImportCommand implements ICommand {
     this.onImportedLine = this.onImportedLine.bind(this);
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
-    this.logger = new PinoLogger();
+    this.logger = new ConsoleLogger();
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.offerService = new HousingOfferService(this.logger, HousingOfferModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
