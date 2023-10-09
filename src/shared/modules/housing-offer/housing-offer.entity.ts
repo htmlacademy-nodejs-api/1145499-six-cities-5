@@ -1,10 +1,5 @@
 import { defaultClasses, getModelForClass, prop, modelOptions, Ref } from '@typegoose/typegoose';
-import {
-  HousingFeature,
-  HousingOffer,
-  HousingType,
-  Geo,
-} from '../../types/index.js';
+import { HousingFeature, HousingType, Geo } from '../../types/index.js';
 import { UserEntity } from '../user/user.entity.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -12,14 +7,12 @@ export interface HousingOfferEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'housing-offer',
+    collection: 'housing-offers',
     timestamps: true,
   },
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export class HousingOfferEntity
-  extends defaultClasses.TimeStamps
-  implements Omit<HousingOffer, 'user'> {
+export class HousingOfferEntity extends defaultClasses.TimeStamps {
   @prop({ minlength: 10, maxlength: 100, required: true })
   public title: string;
 
@@ -29,7 +22,7 @@ export class HousingOfferEntity
   @prop({ required: true })
   public city: string;
 
-  @prop({ min: 1, max: 5, required: true })
+  @prop({ min: 1, max: 5, default: 0, required: true })
   public rating: number;
 
   @prop({ required: true })
@@ -66,7 +59,7 @@ export class HousingOfferEntity
   public userId: Ref<UserEntity>;
 
   @prop({ default: 0 })
-  public commentsTotal: number;
+  public commentsCount: number;
 
   @prop({ required: true })
   public geo: Geo;

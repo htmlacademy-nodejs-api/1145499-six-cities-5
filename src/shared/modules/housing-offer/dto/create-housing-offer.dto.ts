@@ -10,14 +10,11 @@ export class CreateHousingOfferDto implements Omit<HousingOffer, 'user'> {
   public previewPhoto: string;
   public photos: string[];
   public isPremium: boolean;
-  public isFavorite: boolean;
-  public rating: number;
   public type: HousingType;
   public rooms: number;
   public guests: number;
   public cost: number;
   public features: HousingFeature[];
   public userId: string;
-  public commentsTotal: number;
   public geo: Geo;
 }

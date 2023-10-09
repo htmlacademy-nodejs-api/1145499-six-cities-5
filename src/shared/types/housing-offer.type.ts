@@ -10,14 +10,14 @@ export type HousingOffer = {
   previewPhoto: string;
   photos: string[];
   isPremium: boolean;
-  isFavorite: boolean;
-  rating: number;
+  isFavorite?: boolean;
+  rating?: number;
   type: HousingType;
   rooms: number;
   guests: number;
   cost: number;
   features: HousingFeature[];
   user: User;
-  commentsTotal: number;
+  commentsCount?: number;
   geo: Geo;
 };

@@ -1,0 +1,1 @@
+export const DEFAULT_HOUSING_OFFER_COUNT = 60;
