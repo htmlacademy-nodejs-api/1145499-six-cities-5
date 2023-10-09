@@ -25,7 +25,7 @@ export class CommentService implements ICommentService {
       .find({ offerId })
       .sort({ createdAt: SortType.Down })
       .limit(limit)
-      .populate('author', ['name', 'avatar'])
+      .populate('userId', ['name', 'avatar'])
       .exec();
   }
 
