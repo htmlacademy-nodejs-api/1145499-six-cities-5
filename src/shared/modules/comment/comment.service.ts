@@ -18,7 +18,7 @@ export class CommentService implements ICommentService {
 
   public async findByOfferId(
     offerId: string,
-    count: number,
+    count?: number,
   ): Promise<DocumentType<CommentEntity>[]> {
     const limit = count && count < DEFAULT_COMMENT_COUNT ? count : DEFAULT_COMMENT_COUNT;
     return this.commentModel
