@@ -40,7 +40,7 @@ export class TSVOfferGenerator implements IOfferGenerator {
     const userAvatar = getRandomItem(this.mockData.avatars);
     const userPassword = '********';
     const userType = getRandomItem(Object.keys(UserType));
-    const commentsTotal = generateRandomValue(MIN_COMMENTS, MAX_COMMENTS).toString();
+    const commentsCount = generateRandomValue(MIN_COMMENTS, MAX_COMMENTS).toString();
     const latitude = CitiesMap[city as keyof typeof CitiesMap]?.latitude;
     const longitude = CitiesMap[city as keyof typeof CitiesMap]?.longitude;
 
@@ -63,7 +63,7 @@ export class TSVOfferGenerator implements IOfferGenerator {
       userAvatar,
       userPassword,
       userType,
-      commentsTotal,
+      commentsCount,
       latitude,
       longitude,
     ].join('\t');

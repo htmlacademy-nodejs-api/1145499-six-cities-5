@@ -23,7 +23,7 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
     userAvatar,
     userPassword,
     userType,
-    commentsTotal,
+    commentsCount,
     latitude,
     longitude,
   ] = rawData.replace('\n', '').split('\t');
@@ -51,7 +51,7 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
       _password: userPassword,
       type: UserType[userType as keyof typeof UserType],
     },
-    commentsTotal: Number.parseInt(commentsTotal, 10),
+    commentsCount: Number.parseInt(commentsCount, 10),
     geo: { latitude, longitude },
   };
 };
