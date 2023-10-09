@@ -582,7 +582,7 @@ components:
     creator:
       type: object
       properties:
-        id:
+        _id:
           type: string
           example: 65211e7e615961c0f4cbefe8
         name:
@@ -599,7 +599,7 @@ components:
     author:
       type: object
       properties:
-        id:
+        _id:
           type: string
           example: 65211e7e615961c0f4cbefe8
         name:
