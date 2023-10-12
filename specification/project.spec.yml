@@ -1,0 +1,621 @@
+openapi: 3.0.0
+info:
+  title: API сервер для проекта «Six Sities».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Six Sities».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+tags:
+  - name: offers
+    description: Действия с объявлениями
+  - name: users
+    description: Действия с пользователями
+  - name: comments
+    description: Действия с комментариями
+paths:
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Получение предложений об аренде
+      description: Получает список предложений об аренде.
+
+      responses:
+        "200":
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offer"
+    post:
+      tags:
+        - offers
+      summary: Создание предложения об аренде
+      description: Создаёт предложение об аренде.
+
+      requestBody:
+        description: Информация для создания предложения об аренде.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/draftOffer"
+        required: true
+
+      responses:
+        "200":
+          description: Предложение об аренде успешно создано.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createdOffer"
+        "403":
+          description: Создавать предложения об аренде могут только авторизованные пользователи.
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Получение предложения об аренде
+      description: Получает предложение об аренде.
+
+      responses:
+        "200":
+          description: Предложение об аренде успешно получено.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+
+    patch:
+      tags:
+        - offers
+      summary: Редактирование предложения об аренде
+      description: Редактирует предложение об аренде по идентификатору.
+
+      requestBody:
+        description: Информация для редактирования предложения об аренде.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/draftOffer"
+        required: true
+
+      responses:
+        "200":
+          description: Предложение об аренде успешно изменено.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+
+        "403":
+          description: Редактировать можно только свои предложения.
+
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения об аренде
+      description: Удаляет предложение об аренде по идентификатору.
+
+      responses:
+        "204":
+          description: Предложение об аренде успешно удалено.
+        "403":
+          description: Удалять можно только свои предложения.
+
+  /offers/premium:
+    get:
+      tags:
+        - offers
+      summary: Получение премиальных предложений об аренде
+      description: Получает список премиальных предложений об аренде.
+
+      responses:
+        "200":
+          description: Список премиальных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offer"
+
+  /offers/favorite:
+    get:
+      tags:
+        - offers
+      summary: Получение избранных предложений об аренде
+      description: Получает список избранных предложений об аренде.
+
+      responses:
+        "200":
+          description: Список избранных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offer"
+        "403":
+          description: Список избранных предложений доступен только авторизованным пользователям.
+
+    patch:
+      tags:
+        - offers
+      summary: Изменение статуса Избранное предложения
+      description: Измененяет статус Избранное предложения.
+
+      requestBody:
+        description: Информация для редактирования предложения об аренде.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offerId:
+                  type: string
+                  example: 65211e7e615961c0f4cbefe8
+        required: true
+
+      responses:
+        "204":
+          description: Статус предложения Избранное успешно изменён.
+        "403":
+          description: Изменять статус может только авторизованный пользователь.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля.
+
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginUser"
+        required: true
+
+      responses:
+        "200":
+          description: Пользователь успешно авторизован.
+        "401":
+          description: Неверный логин или пароль.
+
+  /users/registration:
+    post:
+      tags:
+        - users
+      summary: Регистрация нового пользователя
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/draftUser"
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь создан. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createdUser"
+
+        "409":
+          description: Пользователь с таким email уже существует.
+
+  /comments/{offerId}:
+    get:
+      tags:
+        - comments
+      summary: Получение комментариев
+      description: Получает список комментариев для предложения.
+
+      responses:
+        "200":
+          description: Список комментариев.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/comment"
+
+    post:
+      tags:
+        - comments
+      summary: Создание комментария
+      description: Создаёт новый комментарий для предложения.
+
+      requestBody:
+        description: Информация для создания комментария.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/draftComment"
+        required: true
+
+      responses:
+        "200":
+          description: Комментарий успешно создан.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/comment"
+        "403":
+          description: Создавать комментарии могут только авторизованные пользователи.
+
+components:
+  schemas:
+    # форма входа зарегестрированного пользователя
+    loginUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: tyrion@lannister.local
+
+        password:
+          type: string
+          example: 12345678
+
+    # форма регистрации нового пользователя
+    draftUser:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Tyrion Lannister
+
+        email:
+          type: string
+          example: tyrion@lannister.local
+
+        avatar:
+          type: string
+          example: "tyrion.jpg"
+
+        type:
+          type: string
+          example: standart
+
+        password:
+          type: string
+          example: 12345678
+
+    # созданный новый пользователь
+    createdUser:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 65211e7e615961c0f4cbefe8
+
+        name:
+          type: string
+          example: Tyrion Lannister
+
+        email:
+          type: string
+          example: tyrion@lannister.local
+
+        avatar:
+          type: string
+          example: "tyrion.jpg"
+
+        type:
+          type: string
+          example: standart
+
+    # черновик комментария
+    draftComment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Wow, this is Amazing House!!!
+
+        rating:
+          type: number
+          example: 5
+
+    # комментарий
+    comment:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 65219307def86da328c9ea9a
+
+        text:
+          type: string
+          example: Wow, this is Amazing House!!!
+
+        createdAt:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+        rating:
+          type: number
+          example: 5
+
+        author:
+          type: object
+          $ref: "#/components/schemas/author"
+
+    # черновик предложения об аренде
+    draftOffer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: Просторная квартира для долгосрочного проживания.
+
+        description:
+          type: string
+          example: Идеальное место для проживания во время вашего визита в город.
+
+        city:
+          type: string
+          example: Amsterdam
+
+        previewPhoto:
+          type: string
+          example: "preview-image-1.jpg"
+
+        photos:
+          type: array
+          example:
+            [
+              "general-image-1.jpg",
+              "general-image-2.jpg",
+              "general-image-3.jpg",
+              "general-image-4.jpg",
+              "general-image-5.jpg",
+              "general-image-6.jpg",
+            ]
+
+        isPremium:
+          type: boolean
+          example: true
+
+        type:
+          type: string
+          example: APARTMENT
+
+        rooms:
+          type: number
+          example: 2
+
+        guests:
+          type: number
+          example: 4
+
+        cost:
+          type: number
+          example: 2000
+
+        features:
+          type: array
+          example: [BABY_SEAT, WASHER, TOWELS]
+
+        geo:
+          type: object
+          $ref: "#/components/schemas/geo"
+
+    # созданное предложение об аренде
+    createdOffer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 65219307def86da328c9ea9a
+
+        title:
+          type: string
+          example: Просторная квартира для долгосрочного проживания.
+
+        description:
+          type: string
+          example: Идеальное место для проживания во время вашего визита в город.
+
+        createdAt:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+        city:
+          type: string
+          example: Amsterdam
+
+        previewPhoto:
+          type: string
+          example: "preview-image-1.jpg"
+
+        photos:
+          type: array
+          example:
+            [
+              "general-image-1.jpg",
+              "general-image-2.jpg",
+              "general-image-3.jpg",
+              "general-image-4.jpg",
+              "general-image-5.jpg",
+              "general-image-6.jpg",
+            ]
+
+        isPremium:
+          type: boolean
+          example: true
+
+        type:
+          type: string
+          example: APARTMENT
+
+        rooms:
+          type: number
+          example: 2
+
+        guests:
+          type: number
+          example: 4
+
+        cost:
+          type: number
+          example: 2000
+
+        features:
+          type: array
+          example: [BABY_SEAT, WASHER, TOWELS]
+
+        creator:
+          type: object
+          $ref: "#/components/schemas/creator"
+
+        geo:
+          type: object
+          $ref: "#/components/schemas/geo"
+
+    # детализированное предложение об аренде
+    offer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 65219307def86da328c9ea9a
+
+        title:
+          type: string
+          example: Просторная квартира для долгосрочного проживания.
+
+        description:
+          type: string
+          example: Идеальное место для проживания во время вашего визита в город.
+
+        createdAt:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+        city:
+          type: string
+          example: Amsterdam
+
+        previewPhoto:
+          type: string
+          example: "preview-image-1.jpg"
+
+        photos:
+          type: array
+          example:
+            [
+              "general-image-1.jpg",
+              "general-image-2.jpg",
+              "general-image-3.jpg",
+              "general-image-4.jpg",
+              "general-image-5.jpg",
+              "general-image-6.jpg",
+            ]
+
+        isPremium:
+          type: boolean
+          example: true
+
+        isFavorite:
+          type: boolean
+          example: false
+
+        rating:
+          type: number
+          example: 4.5
+
+        type:
+          type: string
+          example: APARTMENT
+
+        rooms:
+          type: number
+          example: 2
+
+        guests:
+          type: number
+          example: 4
+
+        cost:
+          type: number
+          example: 2000
+
+        features:
+          type: array
+          example: [BABY_SEAT, WASHER, TOWELS]
+
+        commentsCount:
+          type: number
+          example: 12
+
+        creator:
+          type: object
+          $ref: "#/components/schemas/creator"
+
+        geo:
+          type: object
+          $ref: "#/components/schemas/geo"
+
+    # автор предложения об аренде
+    creator:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 65211e7e615961c0f4cbefe8
+        name:
+          type: string
+          example: Tyrion Lannister
+        email:
+          type: string
+          example: "tyrion@lannister.local"
+        avatar:
+          type: string
+          example: "tyrion.jpg"
+
+    # автор комментария
+    author:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 65211e7e615961c0f4cbefe8
+        name:
+          type: string
+          example: Tyrion Lannister
+        avatar:
+          type: string
+          example: tyrion.jpg
+
+    # геолокация города
+    geo:
+      type: object
+      properties:
+        latitude:
+          type: string
+          example: "52.370216"
+        longitude:
+          type: string
+          example: "4.895168"

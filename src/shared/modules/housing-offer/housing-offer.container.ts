@@ -6,14 +6,14 @@ import { HousingOfferService } from './housing-offer.service.js';
 import { HousingOfferEntity, HousingOfferModel } from './housing-offer.entity.js';
 
 export function createHousingOfferContainer() {
-  const offerContainer = new Container();
-  offerContainer
+  const container = new Container();
+  container
     .bind<IHousingOfferService>(Component.HousingOfferService)
     .to(HousingOfferService)
     .inSingletonScope();
-  offerContainer
+  container
     .bind<types.ModelType<HousingOfferEntity>>(Component.HousingOfferModel)
     .toConstantValue(HousingOfferModel);
 
-  return offerContainer;
+  return container;
 }
