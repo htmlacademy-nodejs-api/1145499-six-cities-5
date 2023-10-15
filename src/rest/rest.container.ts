@@ -4,6 +4,7 @@ import { Component } from '../shared/types/index.js';
 import { ILogger, PinoLogger } from '../shared/libs/logger/index.js';
 import { IConfig, RestConfig, RestSchema } from '../shared/libs/config/index.js';
 import { IDatabaseClient, MongoDatabaseClient } from '../shared/libs/database-client/index.js';
+import { DefaultExceptionFilter, IExceptionFilter } from '../shared/libs/rest/index.js';
 
 export function createRestApplicationContainer() {
   const restApplicationContainer = new Container();
@@ -20,6 +21,10 @@ export function createRestApplicationContainer() {
   restApplicationContainer
     .bind<IDatabaseClient>(Component.DatabaseClient)
     .to(MongoDatabaseClient)
+    .inSingletonScope();
+  restApplicationContainer
+    .bind<IExceptionFilter>(Component.ExceptionFilter)
+    .to(DefaultExceptionFilter)
     .inSingletonScope();
 
   return restApplicationContainer;
