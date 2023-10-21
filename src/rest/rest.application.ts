@@ -5,9 +5,7 @@ import { IConfig, RestSchema } from '../shared/libs/config/index.js';
 import { IDatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI } from '../shared/helpers/index.js';
 import { Component } from '../shared/types/component.enum.js';
-// import { IHousingOfferService } from '../shared/modules/housing-offer/index.js';
-// import { ICommentService } from '../shared/modules/comment/index.js';
-import { IExceptionFilter } from '../shared/libs/rest/index.js';
+import { IExceptionFilter, IController } from '../shared/libs/rest/index.js';
 
 @injectable()
 export class RestApplication {
@@ -17,7 +15,8 @@ export class RestApplication {
     @inject(Component.Logger) private readonly logger: ILogger,
     @inject(Component.Config) private readonly config: IConfig<RestSchema>,
     @inject(Component.DatabaseClient) private readonly databaseClient: IDatabaseClient,
-    @inject(Component.ExceptionFilter) private readonly defaultExceptionFilter: IExceptionFilter, // @inject(Component.HousingOfferService) private readonly offerService: IHousingOfferService, // @inject(Component.CommentService) private readonly commentService: ICommentService,
+    @inject(Component.ExceptionFilter) private readonly defaultExceptionFilter: IExceptionFilter,
+    @inject(Component.UserController) private readonly userController: IController,
   ) {
     this.server = express();
   }
@@ -32,6 +31,10 @@ export class RestApplication {
     );
 
     return this.databaseClient.connect(mongoUri);
+  }
+
+  private async _initControllers() {
+    this.server.use('/users', this.userController.router);
   }
 
   private async _initMiddleware() {
@@ -59,6 +62,10 @@ export class RestApplication {
     await this._initMiddleware();
     this.logger.info('App-level middleware initialization completed');
 
+    this.logger.info('Init controllers');
+    await this._initControllers();
+    this.logger.info('Controller initialization completed');
+
     this.logger.info('Init exception filters');
     await this._initExceptionFilters();
     this.logger.info('Exception filters initialization compleated');
@@ -66,28 +73,5 @@ export class RestApplication {
     this.logger.info('Try to init server…');
     await this._initServer();
     this.logger.info(`🚀 Server started on http://localhost:${this.config.get('PORT')}`);
-
-    // TODO: временный код для тестирования
-    // const comment1 = await this.commentService.create({
-    //   text: 'Hello, World',
-    //   userId: '65240b1c17ba3f4be9b99dc0',
-    //   offerId: '65240b1c17ba3f4be9b99dc2',
-    //   rating: 3,
-    // });
-    // console.log('comment1', comment1);
-
-    // const comment2 = await this.commentService.create({
-    //   text: 'Hello, World War III',
-    //   userId: '65240b1c17ba3f4be9b99dc0',
-    //   offerId: '65240b1c17ba3f4be9b99dc2',
-    //   rating: 4,
-    // });
-    // console.log('comment2', comment2);
-
-    // // const findedComment = await this.commentService.findByOfferId('6523e9a795b99a3bdb65c10a', 10);
-    // // console.log('findedComment', findedComment);
-
-    // const offers = await this.offerService.find();
-    // console.log(offers);
   }
 }
