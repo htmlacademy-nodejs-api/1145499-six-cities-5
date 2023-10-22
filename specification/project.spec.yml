@@ -9,7 +9,7 @@ info:
   version: 1.0.0
 tags:
   - name: offers
-    description: Действия с объявлениями
+    description: Действия с предложениями об аренде
   - name: users
     description: Действия с пользователями
   - name: comments
@@ -59,8 +59,8 @@ paths:
     get:
       tags:
         - offers
-      summary: Получение предложения об аренде
-      description: Получает предложение об аренде.
+      summary: Получение предложения об аренде по идентификатору
+      description: Получает предложение об аренде по идентификатору.
 
       responses:
         "200":

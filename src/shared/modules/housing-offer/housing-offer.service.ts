@@ -24,7 +24,7 @@ export class HousingOfferService implements IHousingOfferService {
   }
 
   public async findById(offerId: string): Promise<DocumentType<HousingOfferEntity> | null> {
-    return this.offerModel.findOne({ offerId }).populate('userId', ['name', 'avatar']).exec();
+    return this.offerModel.findById(offerId).populate('userId');
   }
 
   public async find(count?: number): Promise<DocumentType<HousingOfferEntity>[]> {
@@ -52,7 +52,7 @@ export class HousingOfferService implements IHousingOfferService {
   }
 
   public async deleteById(offerId: string): Promise<DocumentType<HousingOfferEntity> | null> {
-    return this.offerModel.findByIdAndDelete(offerId).exec();
+    return this.offerModel.findByIdAndDelete(offerId);
   }
 
   public async updateById(
