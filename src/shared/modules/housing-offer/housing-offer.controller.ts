@@ -1,19 +1,18 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
-  HttpError,
   HttpMethod,
   ValidateObjectIdMiddleware,
+  DocumentExistsMiddleware,
 } from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
-import { IHousingOfferService } from './housing-offer-service.interface.js';
-import { ParamOfferId } from './types/param-offerid.type.js';
 import { fillDTO } from '../../helpers/index.js';
-import { HousingOfferRdo } from './rdo/housing-offer.rdo.js';
 import { CommentRdo, ICommentService } from '../comment/index.js';
+import { IHousingOfferService } from './housing-offer-service.interface.js';
+import { HousingOfferRdo } from './rdo/housing-offer.rdo.js';
+import { ParamOfferId } from './types/param-offerid.type.js';
 
 @injectable()
 export class HousingOfferController extends BaseController {
@@ -30,34 +29,35 @@ export class HousingOfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Get,
       handler: this.show,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.housingOfferService, 'Offer', 'offerId'),
+      ],
     });
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.housingOfferService, 'Offer', 'offerId'),
+      ],
     });
     this.addRoute({
       path: '/:offerId/comments',
       method: HttpMethod.Get,
       handler: this.getComments,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.housingOfferService, 'Offer', 'offerId'),
+      ],
     });
   }
 
   public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
     const offer = await this.housingOfferService.findById(offerId);
-
-    if (!offer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${offerId} not found.`,
-        'OfferController',
-      );
-    }
 
     this.ok(res, fillDTO(HousingOfferRdo, offer));
   }
@@ -71,28 +71,12 @@ export class HousingOfferController extends BaseController {
     const { offerId } = params;
     const offer = await this.housingOfferService.deleteById(offerId);
 
-    if (!offer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${offerId} not found.`,
-        'OfferController',
-      );
-    }
-
     await this.commentService.deleteByOfferId(offerId);
 
     this.noContent(res, offer);
   }
 
   public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    if (!(await this.housingOfferService.exists(params.offerId))) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${params.offerId} not found.`,
-        'OfferController',
-      );
-    }
-
     const comments = await this.commentService.findByOfferId(params.offerId);
     this.ok(res, fillDTO(CommentRdo, comments));
   }
