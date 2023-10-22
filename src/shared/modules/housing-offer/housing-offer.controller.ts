@@ -1,11 +1,16 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
+import {
+  BaseController,
+  HttpError,
+  HttpMethod,
+  ValidateObjectIdMiddleware,
+} from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { IHousingOfferService } from './housing-offer-service.interface.js';
-import { ParamOfferId } from './types/param-offerId.type.js';
+import { ParamOfferId } from './types/param-offerid.type.js';
 import { fillDTO } from '../../helpers/index.js';
 import { HousingOfferRdo } from './rdo/housing-offer.rdo.js';
 import { CommentRdo, ICommentService } from '../comment/index.js';
@@ -21,13 +26,24 @@ export class HousingOfferController extends BaseController {
     super(logger);
 
     this.logger.info('Register routes for HousingOfferController');
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.show });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Get,
+      handler: this.show,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+    });
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+    });
     this.addRoute({
       path: '/:offerId/comments',
       method: HttpMethod.Get,
       handler: this.getComments,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
     });
   }
 
