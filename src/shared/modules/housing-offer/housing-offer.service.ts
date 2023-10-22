@@ -74,4 +74,8 @@ export class HousingOfferService implements IHousingOfferService {
       })
       .exec();
   }
+
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.offerModel.exists({ _id: documentId })) !== null;
+  }
 }

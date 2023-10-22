@@ -13,4 +13,5 @@ export interface IHousingOfferService {
     dto: UpdateHousingOfferDto,
   ): Promise<DocumentType<HousingOfferEntity> | null>;
   incCommentCount(offerId: string): Promise<DocumentType<HousingOfferEntity> | null>;
+  exists(documentId: string): Promise<boolean>;
 }
