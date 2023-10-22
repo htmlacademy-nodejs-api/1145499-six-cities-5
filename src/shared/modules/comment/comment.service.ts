@@ -13,7 +13,8 @@ export class CommentService implements ICommentService {
   ) {}
 
   public async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
-    return this.commentModel.create(dto);
+    const comment = await this.commentModel.create(dto);
+    return comment.populate('userId');
   }
 
   public async findByOfferId(
@@ -25,13 +26,11 @@ export class CommentService implements ICommentService {
       .find({ offerId })
       .sort({ createdAt: SortType.Down })
       .limit(limit)
-      .populate('userId', ['name', 'avatar'])
-      .exec();
+      .populate('userId');
   }
 
   public async deleteByOfferId(offerId: string): Promise<number> {
     const result = await this.commentModel.deleteMany({ offerId }).exec();
-
     return result.deletedCount;
   }
 }

@@ -1,0 +1,22 @@
+# Предложения об аренде
+
+## Получить предложения об аренде по идентификатору
+GET http://localhost:4000/offers/65240b1c17ba3f4be9b99dc7 HTTP/1.1
+
+###
+
+## Получить список предложения об аренде
+GET http://localhost:4000/offers HTTP/1.1
+
+###
+
+## Удалить предложения об аренде по идентификатору
+
+DELETE http://localhost:4000/offers/65240b1c17ba3f4be9b99dc2 HTTP/1.1
+
+###
+
+## Список комментариев к предложению об аренде
+GET http://localhost:4000/offers/65240b1c17ba3f4be9b99dd1/comments HTTP/1.1
+
+###
