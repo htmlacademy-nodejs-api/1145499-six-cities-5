@@ -40,7 +40,7 @@ export class AuthService implements IAuthService {
       throw new UserNotFoundException();
     }
 
-    if (!user.verifyPassword(dto._password, this.config.get('SALT'))) {
+    if (!user.verifyPassword(dto.password, this.config.get('SALT'))) {
       this.logger.warn(`Incorrect password for ${dto.email}`);
       throw new UserPasswordIncorrectException();
     }

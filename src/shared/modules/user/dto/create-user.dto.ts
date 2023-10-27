@@ -14,9 +14,9 @@ export class CreateUserDto implements User {
   @IsString({ message: CreateUserMessages.avatar.invalidFormat })
   public avatar: string;
 
-  @IsString({ message: CreateUserMessages._password.invalidFormat })
-  @Length(6, 12, { message: CreateUserMessages._password.lengthField })
-  public _password: string;
+  @IsString({ message: CreateUserMessages.password.invalidFormat })
+  @Length(6, 12, { message: CreateUserMessages.password.lengthField })
+  public password: string;
 
   @IsEnum(UserType, { message: CreateUserMessages.type.invalid })
   public type: UserType;

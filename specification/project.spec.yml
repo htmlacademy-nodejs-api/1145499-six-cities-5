@@ -267,7 +267,7 @@ components:
           type: string
           example: tyrion@lannister.local
 
-        _password:
+        password:
           type: string
           example: 12345678
 

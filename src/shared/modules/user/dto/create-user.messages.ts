@@ -9,10 +9,10 @@ export const CreateUserMessages = {
   avatar: {
     invalidFormat: 'avatar is required',
   },
-  _password: {
+  password: {
     invalidFormat: 'password is required',
     lengthField: 'min length for password is 6, max is 12',
   },
 
-  type: { invalid: 'type must be pro and standart' },
+  type: { invalid: 'type must be pro or standart' },
 } as const;
