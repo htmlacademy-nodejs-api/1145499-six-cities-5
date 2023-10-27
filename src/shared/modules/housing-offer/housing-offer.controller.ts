@@ -3,8 +3,9 @@ import { Request, Response } from 'express';
 import {
   BaseController,
   HttpMethod,
-  ValidateObjectIdMiddleware,
   DocumentExistsMiddleware,
+  PrivateRouteMiddleware,
+  ValidateObjectIdMiddleware,
 } from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -40,6 +41,7 @@ export class HousingOfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.housingOfferService, 'Offer', 'offerId'),
       ],
