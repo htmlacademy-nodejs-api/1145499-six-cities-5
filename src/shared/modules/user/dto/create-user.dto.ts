@@ -1,6 +1,6 @@
 import { User } from '../../../types/user.type.js';
 import { UserType } from '../../../types/user-type.enum.js';
-import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
 import { CreateUserMessages } from './create-user.messages.js';
 
 export class CreateUserDto implements User {
@@ -11,6 +11,7 @@ export class CreateUserDto implements User {
   @IsEmail({}, { message: CreateUserMessages.email.invalidFormat })
   public email: string;
 
+  @IsOptional()
   @IsString({ message: CreateUserMessages.avatar.invalidFormat })
   public avatar: string;
 

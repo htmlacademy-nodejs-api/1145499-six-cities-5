@@ -23,6 +23,7 @@ export class AuthService implements IAuthService {
     const secretKey = crypto.createSecretKey(jwtSecret, 'utf-8');
     const tokenPayload: TokenPayload = {
       id: user.id,
+      email: user.email,
     };
 
     this.logger.info(`Create token for ${user.email}`);

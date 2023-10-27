@@ -5,6 +5,7 @@ import {
   BaseController,
   HttpError,
   HttpMethod,
+  PrivateRouteMiddleware,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
   UploadFileMiddleware,
@@ -15,8 +16,8 @@ import { IConfig, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { AuthService } from '../auth/index.js';
 import { IUserService } from './user-service.interface.js';
-import { CreateUserRequest } from './create-user-request.type.js';
-import { LoginUserRequest } from './login-user-request.type.js';
+import { CreateUserRequest } from './types/create-user-request.type.js';
+import { LoginUserRequest } from './types/login-user-request.type.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
@@ -54,6 +55,12 @@ export class UserController extends BaseController {
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ],
     });
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Get,
+      handler: this.checkAuthenticate,
+      middlewares: [new PrivateRouteMiddleware()],
+    });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -85,5 +92,11 @@ export class UserController extends BaseController {
     this.created(res, {
       filepath: req.file?.path,
     });
+  }
+
+  public async checkAuthenticate({ tokenPayload: { email } }: Request, res: Response) {
+    const foundedUser = await this.userService.findByEmail(email);
+
+    this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
   }
 }

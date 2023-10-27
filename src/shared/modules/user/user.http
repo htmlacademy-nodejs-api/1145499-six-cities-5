@@ -8,8 +8,8 @@ Content-Type: application/json
 {
   "name": "Jack Sparrow",
   "email": "torans@overlook.net",
-  "avatar": "torrance.png",
-  "password": "shining"
+  "password": "shining",
+  "type": "standart"
 }
 
 ###
@@ -38,4 +38,9 @@ Content-Type: image/png
 < /Users/filippoussis/Desktop/megafon.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
+###
+
+## Проверить токен пользователя
+GET http://localhost:4000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5ODQ0NTM4OCwiZXhwIjoxNjk4NjE4MTg4fQ.EvOThPBH49UGBlVgZi1xv8Rs2ct_aaKpiLPuBZW5CoA
+###
