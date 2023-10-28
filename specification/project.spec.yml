@@ -246,14 +246,14 @@ paths:
         required: true
 
       responses:
-        "200":
+        "201":
           description: Комментарий успешно создан.
           content:
             application/json:
               schema:
                 type: object
                 $ref: "#/components/schemas/comment"
-        "403":
+        "401":
           description: Создавать комментарии могут только авторизованные пользователи.
 
 components:
@@ -341,23 +341,23 @@ components:
       properties:
         id:
           type: string
-          example: 65219307def86da328c9ea9a
+          example: 653c282b0b80c84a7d16b61b
 
         text:
           type: string
           example: Wow, this is Amazing House!!!
 
-        createdAt:
-          type: string
-          example: 2023-10-07T17:19:03.813Z
-
         rating:
           type: number
           example: 5
 
-        author:
+        createdAt:
+          type: string
+          example: 2023-10-27T21:14:19.436Z
+
+        user:
           type: object
-          $ref: "#/components/schemas/author"
+          $ref: "#/components/schemas/user"
 
     # черновик предложения об аренде
     draftOffer:
@@ -596,18 +596,21 @@ components:
           example: "tyrion.jpg"
 
     # автор комментария
-    author:
+    user:
       type: object
       properties:
-        _id:
-          type: string
-          example: 65211e7e615961c0f4cbefe8
         name:
           type: string
           example: Tyrion Lannister
+        email:
+          type: string
+          example: tyrion@lannister.local
         avatar:
           type: string
           example: tyrion.jpg
+        type:
+          type: string
+          example: pro
 
     # геолокация города
     geo:
