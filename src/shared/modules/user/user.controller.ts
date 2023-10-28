@@ -97,6 +97,6 @@ export class UserController extends BaseController {
   public async checkAuthenticate({ tokenPayload: { email } }: Request, res: Response) {
     const foundedUser = await this.userService.findByEmail(email);
 
-    this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
+    this.ok(res, fillDTO(UserRdo, foundedUser));
   }
 }
