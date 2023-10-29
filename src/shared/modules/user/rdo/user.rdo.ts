@@ -1,6 +1,10 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 
 export class UserRdo {
+  @Expose()
+  @Transform((value) => value.obj._id.toString())
+  public id: string;
+
   @Expose()
   public name: string;
 
