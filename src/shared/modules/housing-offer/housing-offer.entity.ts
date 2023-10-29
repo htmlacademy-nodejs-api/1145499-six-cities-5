@@ -22,20 +22,14 @@ export class HousingOfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public city: string;
 
-  @prop({ min: 1, max: 5, default: 0, required: true })
-  public rating: number;
-
   @prop({ required: true })
   public previewPhoto: string;
 
   @prop({ required: true })
   public photos: string[];
 
-  @prop({ default: false, required: true })
+  @prop({ default: false })
   public isPremium: boolean;
-
-  @prop({ default: false, required: true })
-  public isFavorite: boolean;
 
   @prop({ required: true })
   public type: HousingType;
@@ -57,9 +51,6 @@ export class HousingOfferEntity extends defaultClasses.TimeStamps {
     required: true,
   })
   public userId: Ref<UserEntity>;
-
-  @prop({ default: 0 })
-  public commentsCount: number;
 
   @prop({ required: true })
   public geo: Geo;

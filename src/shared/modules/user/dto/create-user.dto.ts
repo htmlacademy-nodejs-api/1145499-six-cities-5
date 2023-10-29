@@ -1,6 +1,6 @@
+import { IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
 import { User } from '../../../types/user.type.js';
 import { UserType } from '../../../types/user-type.enum.js';
-import { IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
 import { CreateUserMessages } from './create-user.messages.js';
 
 export class CreateUserDto implements User {
