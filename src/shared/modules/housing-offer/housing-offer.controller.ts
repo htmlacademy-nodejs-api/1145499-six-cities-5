@@ -12,6 +12,7 @@ import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ICommentService } from '../comment/index.js';
+import { IFavoriteService, CreateFavoriteDto, FavoriteRdo } from '../favorite/index.js';
 import { IHousingOfferService } from './housing-offer-service.interface.js';
 import { HousingOfferRdo } from './rdo/housing-offer.rdo.js';
 import { CreateHousingOfferDto } from './dto/create-housing-offer.dto.js';
@@ -26,6 +27,7 @@ export class HousingOfferController extends BaseController {
     @inject(Component.HousingOfferService)
     private readonly offerService: IHousingOfferService,
     @inject(Component.CommentService) private readonly commentService: ICommentService,
+    @inject(Component.FavoriteService) private readonly favoriteService: IFavoriteService,
   ) {
     super(logger);
 
@@ -72,6 +74,13 @@ export class HousingOfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
+
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Post,
+      handler: this.toggleFavorite,
+      middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateFavoriteDto)],
+    });
   }
 
   public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -110,5 +119,11 @@ export class HousingOfferController extends BaseController {
     await this.commentService.deleteByOfferId(offerId);
 
     this.noContent(res, offer);
+  }
+
+  public async toggleFavorite({ body, tokenPayload }: Request, res: Response): Promise<void> {
+    const result = await this.favoriteService.toggle({ ...body, userId: tokenPayload.id });
+
+    this.ok(res, fillDTO(FavoriteRdo, result));
   }
 }
