@@ -2,7 +2,7 @@ export const CreateLoginUserMessage = {
   email: {
     invalidFormat: 'email must be a valid address',
   },
-  _password: {
+  password: {
     invalidFormat: 'password is required',
   },
 } as const;

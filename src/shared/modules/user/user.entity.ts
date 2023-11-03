@@ -1,5 +1,5 @@
 import { defaultClasses, getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
-import { User } from '../../types/index.js';
+import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -19,14 +19,17 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ unique: true, required: true })
   public email;
 
-  @prop()
+  @prop({ required: false })
   public avatar;
 
-  @prop()
+  @prop({
+    type: () => String,
+    enum: UserType,
+  })
   public type;
 
-  @prop({ required: true })
-  public _password: string;
+  @prop({ min: 6, max: 12, required: true })
+  public password: string;
 
   constructor(userData: User) {
     super();
@@ -38,11 +41,16 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   }
 
   public setPassword(password: string, salt: string) {
-    this._password = createSHA256(password, salt);
+    this.password = createSHA256(password, salt);
   }
 
   public getPassword() {
-    return this._password;
+    return this.password;
+  }
+
+  public verifyPassword(password: string, salt: string) {
+    const hashPassword = createSHA256(password, salt);
+    return hashPassword === this.password;
   }
 }
 

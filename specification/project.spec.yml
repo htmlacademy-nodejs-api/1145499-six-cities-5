@@ -171,11 +171,11 @@ paths:
     post:
       tags:
         - users
-      summary: Авторизация пользователя
-      description: Авторизует пользователя на основе логина и пароля.
+      summary: Аутентификация пользователя
+      description: Аутентифицирует пользователя на основе логина и пароля.
 
       requestBody:
-        description: Информация для авторизации пользователя.
+        description: Информация для аутентификации пользователя.
         content:
           application/json:
             schema:
@@ -184,9 +184,29 @@ paths:
 
       responses:
         "200":
-          description: Пользователь успешно авторизован.
+          description: Пользователь успешно аутентифицирован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/authToken"
         "401":
           description: Неверный логин или пароль.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояние токена пользователя
+      description: Проверяет авторизован пользователь или нет.
+
+      responses:
+        "200":
+          description: Пользователь авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        "401":
+          description: Пользователь не авторизован.
 
   /users/registration:
     post:
@@ -209,7 +229,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createdUser"
+                $ref: "#/components/schemas/user"
 
         "409":
           description: Пользователь с таким email уже существует.
@@ -246,14 +266,14 @@ paths:
         required: true
 
       responses:
-        "200":
+        "201":
           description: Комментарий успешно создан.
           content:
             application/json:
               schema:
                 type: object
                 $ref: "#/components/schemas/comment"
-        "403":
+        "401":
           description: Создавать комментарии могут только авторизованные пользователи.
 
 components:
@@ -267,7 +287,7 @@ components:
           type: string
           example: tyrion@lannister.local
 
-        _password:
+        password:
           type: string
           example: 12345678
 
@@ -296,15 +316,11 @@ components:
           type: string
           example: 12345678
 
-    # созданный новый пользователь
-    createdUser:
+    # пользователь
+    user:
       type: object
 
       properties:
-        id:
-          type: string
-          example: 65211e7e615961c0f4cbefe8
-
         name:
           type: string
           example: Tyrion Lannister
@@ -320,6 +336,19 @@ components:
         type:
           type: string
           example: standart
+
+    # авторизационный токен
+    authToken:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: tyrion@lannister.local
+
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5ODQ0NTM4OCwiZXhwIjoxNjk4NjE4MTg4fQ.EvOThPBH49UGBlVgZi1xv8Rs2ct_aaKpiLPuBZW5CoA
 
     # черновик комментария
     draftComment:
@@ -341,23 +370,23 @@ components:
       properties:
         id:
           type: string
-          example: 65219307def86da328c9ea9a
+          example: 653c282b0b80c84a7d16b61b
 
         text:
           type: string
           example: Wow, this is Amazing House!!!
 
-        createdAt:
-          type: string
-          example: 2023-10-07T17:19:03.813Z
-
         rating:
           type: number
           example: 5
 
-        author:
+        createdAt:
+          type: string
+          example: 2023-10-27T21:14:19.436Z
+
+        user:
           type: object
-          $ref: "#/components/schemas/author"
+          $ref: "#/components/schemas/user"
 
     # черновик предложения об аренде
     draftOffer:
@@ -485,9 +514,9 @@ components:
           type: array
           example: [BABY_SEAT, WASHER, TOWELS]
 
-        creator:
+        user:
           type: object
-          $ref: "#/components/schemas/creator"
+          $ref: "#/components/schemas/user"
 
         geo:
           type: object
@@ -570,44 +599,13 @@ components:
           type: number
           example: 12
 
-        creator:
+        user:
           type: object
-          $ref: "#/components/schemas/creator"
+          $ref: "#/components/schemas/user"
 
         geo:
           type: object
           $ref: "#/components/schemas/geo"
-
-    # автор предложения об аренде
-    creator:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: 65211e7e615961c0f4cbefe8
-        name:
-          type: string
-          example: Tyrion Lannister
-        email:
-          type: string
-          example: "tyrion@lannister.local"
-        avatar:
-          type: string
-          example: "tyrion.jpg"
-
-    # автор комментария
-    author:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: 65211e7e615961c0f4cbefe8
-        name:
-          type: string
-          example: Tyrion Lannister
-        avatar:
-          type: string
-          example: tyrion.jpg
 
     # геолокация города
     geo:

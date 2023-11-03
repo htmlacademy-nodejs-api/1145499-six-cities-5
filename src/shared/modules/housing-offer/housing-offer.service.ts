@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
 import { ILogger } from '../../libs/logger/index.js';
@@ -24,7 +25,39 @@ export class HousingOfferService implements IHousingOfferService {
   }
 
   public async findById(offerId: string): Promise<DocumentType<HousingOfferEntity> | null> {
-    return this.offerModel.findById(offerId).populate('userId');
+    const [offer] = await this.offerModel
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(offerId),
+          },
+        },
+        {
+          $lookup: {
+            from: 'comments',
+            localField: '_id',
+            foreignField: 'offerId',
+            as: 'comments',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userId',
+          },
+        },
+        {
+          $addFields: {
+            rating: { $round: [{ $avg: '$comments.rating' }, 1] },
+          },
+        },
+        { $unset: 'comments' },
+      ])
+      .exec();
+
+    return offer;
   }
 
   public async find(count?: number): Promise<DocumentType<HousingOfferEntity>[]> {
@@ -36,16 +69,26 @@ export class HousingOfferService implements IHousingOfferService {
         {
           $lookup: {
             from: 'comments',
-            let: { id: '$_id' },
-            pipeline: [{ $match: { $expr: { $eq: ['$offerId', '$$id'] } } }],
+            localField: '_id',
+            foreignField: 'offerId',
             as: 'comments',
           },
         },
         {
-          $addFields: { rating: { $avg: '$comments.rating' } },
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userId',
+          },
+        },
+        {
+          $addFields: {
+            rating: { $round: [{ $avg: '$comments.rating' }, 1] },
+          },
         },
         { $unset: 'comments' },
-        { $sort: { offerCount: SortType.Down } },
+        { $sort: { createdAt: SortType.Down } },
         { $limit: limit },
       ])
       .exec();
@@ -59,17 +102,14 @@ export class HousingOfferService implements IHousingOfferService {
     offerId: string,
     dto: UpdateHousingOfferDto,
   ): Promise<DocumentType<HousingOfferEntity> | null> {
-    return this.offerModel
-      .findByIdAndUpdate(offerId, dto, { new: true })
-      .populate('userId', ['name', 'avatar'])
-      .exec();
+    return this.offerModel.findByIdAndUpdate(offerId, dto, { new: true }).populate('userId').exec();
   }
 
   public async incCommentCount(offerId: string): Promise<DocumentType<HousingOfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, {
         $inc: {
-          commentCount: 1,
+          commentsCount: 1,
         },
       })
       .exec();

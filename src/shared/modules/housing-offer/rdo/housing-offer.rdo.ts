@@ -1,8 +1,9 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Type, Transform } from 'class-transformer';
 import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 export class HousingOfferRdo {
   @Expose()
+  @Transform((value) => value.obj._id.toString())
   public id: string;
 
   @Expose()
@@ -45,7 +46,7 @@ export class HousingOfferRdo {
   public features: string[];
 
   @Expose()
-  public commentCount: number;
+  public commentsCount: number;
 
   @Expose()
   public geo: string;

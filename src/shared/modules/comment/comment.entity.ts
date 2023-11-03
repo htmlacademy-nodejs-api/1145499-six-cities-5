@@ -13,10 +13,10 @@ export interface CommentEntity extends defaultClasses.Base {}
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class CommentEntity extends defaultClasses.TimeStamps {
-  @prop({ trim: true })
+  @prop({ minlength: 5, maxlength: 1024, trim: true, required: true })
   public text: string;
 
-  @prop({ min: 1, max: 5, default: 0 })
+  @prop({ min: 1, max: 5, required: true })
   public rating: number;
 
   @prop({

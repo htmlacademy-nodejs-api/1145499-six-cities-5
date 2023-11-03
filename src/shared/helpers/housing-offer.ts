@@ -48,7 +48,7 @@ export const createHousingOffer = (rawData: string): HousingOffer => {
       name: userName,
       email: userEmail,
       avatar: userAvatar,
-      _password: userPassword,
+      password: userPassword,
       type: UserType[userType as keyof typeof UserType],
     },
     commentsCount: Number.parseInt(commentsCount, 10),

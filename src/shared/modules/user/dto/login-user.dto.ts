@@ -5,6 +5,6 @@ export class LoginUserDto {
   @IsEmail({}, { message: CreateLoginUserMessage.email.invalidFormat })
   public email: string;
 
-  @IsString({ message: CreateLoginUserMessage._password.invalidFormat })
-  public _password: string;
+  @IsString({ message: CreateLoginUserMessage.password.invalidFormat })
+  public password: string;
 }
