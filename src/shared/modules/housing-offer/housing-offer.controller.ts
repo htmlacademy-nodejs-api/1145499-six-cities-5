@@ -76,24 +76,43 @@ export class HousingOfferController extends BaseController {
     });
 
     this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.Post,
+      path: '/favorites/all',
+      method: HttpMethod.Get,
+      handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()],
+    });
+
+    this.addRoute({
+      path: '/:offerId/favorites',
+      method: HttpMethod.Patch,
       handler: this.toggleFavorite,
       middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateFavoriteDto)],
     });
   }
 
-  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const { offerId } = params;
-    const offer = await this.offerService.findById(offerId);
+  public async index({ tokenPayload }: Request, res: Response) {
+    let offers = [];
 
-    this.ok(res, fillDTO(HousingOfferRdo, offer));
-  }
-
-  public async index(_req: Request, res: Response) {
-    const offers = await this.offerService.find();
+    if (tokenPayload) {
+      offers = await this.offerService.findWithCredentials(tokenPayload.id);
+    } else {
+      offers = await this.offerService.find();
+    }
 
     this.ok(res, fillDTO(HousingOfferRdo, offers));
+  }
+
+  public async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    let offer = null;
+
+    if (tokenPayload) {
+      offer = await this.offerService.findByIdWithCredentials(offerId, tokenPayload.id);
+    } else {
+      offer = await this.offerService.findById(offerId);
+    }
+
+    this.ok(res, fillDTO(HousingOfferRdo, offer));
   }
 
   public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
@@ -119,6 +138,12 @@ export class HousingOfferController extends BaseController {
     await this.commentService.deleteByOfferId(offerId);
 
     this.noContent(res, offer);
+  }
+
+  public async getFavorites({ tokenPayload }: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.findFavorites(tokenPayload.id);
+
+    this.ok(res, fillDTO(HousingOfferRdo, offers));
   }
 
   public async toggleFavorite({ body, tokenPayload }: Request, res: Response): Promise<void> {

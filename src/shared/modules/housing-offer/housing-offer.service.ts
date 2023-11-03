@@ -60,6 +60,62 @@ export class HousingOfferService implements IHousingOfferService {
     return offer;
   }
 
+  public async findByIdWithCredentials(offerId: string, userId: string): Promise<DocumentType<HousingOfferEntity> | null> {
+    const [ offer ] = await this.offerModel
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(offerId),
+          },
+        },
+        {
+          $lookup: {
+            from: 'comments',
+            localField: '_id',
+            foreignField: 'offerId',
+            as: 'comments',
+          },
+        },
+        {
+          $lookup: {
+            from: 'favorites',
+            let: { offerId: '$_id' },
+            pipeline: [
+              { $match:
+                  { $expr:
+                    { $and:
+                      [
+                        { $eq: ['$userId', new ObjectId(userId)] },
+                        { $in: ['$$offerId', '$favorites'] }
+                      ]
+                    }
+                  }
+              }
+            ],
+            as: 'favorites',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userId',
+          },
+        },
+        {
+          $addFields: {
+            rating: { $round: [{ $avg: '$comments.rating' }, 1] },
+            isFavorite: { $toBool: { $size: '$favorites' } }
+          },
+        },
+        { $unset: 'comments' },
+      ])
+      .exec();
+
+    return offer;
+  }
+
   public async find(count?: number): Promise<DocumentType<HousingOfferEntity>[]> {
     const limit =
       count && count < DEFAULT_HOUSING_OFFER_COUNT ? count : DEFAULT_HOUSING_OFFER_COUNT;
@@ -88,6 +144,119 @@ export class HousingOfferService implements IHousingOfferService {
           },
         },
         { $unset: 'comments' },
+        { $sort: { createdAt: SortType.Down } },
+        { $limit: limit },
+      ])
+      .exec();
+  }
+
+  public async findWithCredentials(userId: string, count?: number): Promise<DocumentType<HousingOfferEntity>[]> {
+    const limit =
+      count && count < DEFAULT_HOUSING_OFFER_COUNT ? count : DEFAULT_HOUSING_OFFER_COUNT;
+
+    return this.offerModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'comments',
+            localField: '_id',
+            foreignField: 'offerId',
+            as: 'comments',
+          },
+        },
+        {
+          $lookup: {
+            from: 'favorites',
+            let: { offerId: '$_id' },
+            pipeline: [
+              { $match:
+                  { $expr:
+                    { $and:
+                      [
+                        { $eq: ['$userId', new ObjectId(userId)] },
+                        { $in: ['$$offerId', '$favorites'] }
+                      ]
+                    }
+                  }
+              }
+            ],
+            as: 'favorites',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userId',
+          },
+        },
+        {
+          $addFields: {
+            rating: { $round: [{ $avg: '$comments.rating' }, 1] },
+            isFavorite: { $toBool: { $size: '$favorites' } }
+          },
+        },
+        { $unset: ['comments', 'favorites'] },
+        { $sort: { createdAt: SortType.Down } },
+        { $limit: limit },
+      ])
+      .exec();
+  }
+
+  public async findFavorites(userId: string, count?: number): Promise<DocumentType<HousingOfferEntity>[]> {
+    const limit =
+      count && count < DEFAULT_HOUSING_OFFER_COUNT ? count : DEFAULT_HOUSING_OFFER_COUNT;
+
+    return this.offerModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'comments',
+            localField: '_id',
+            foreignField: 'offerId',
+            as: 'comments',
+          },
+        },
+        {
+          $lookup: {
+            from: 'favorites',
+            let: { offerId: '$_id' },
+            pipeline: [
+              { $match:
+                  { $expr:
+                    { $and:
+                      [
+                        { $eq: ['$userId', new ObjectId(userId)] },
+                        { $in: ['$$offerId', '$favorites'] }
+                      ]
+                    }
+                  }
+              }
+            ],
+            as: 'favorites',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userId',
+          },
+        },
+        {
+          $addFields: {
+            rating: { $round: [{ $avg: '$comments.rating' }, 1] },
+            isFavorite: { $toBool: { $size: '$favorites' } }
+          },
+        },
+        { $unset: ['comments', 'favorites'] },
+        {
+          $match: {
+            isFavorite: true,
+          }
+        },
         { $sort: { createdAt: SortType.Down } },
         { $limit: limit },
       ])
