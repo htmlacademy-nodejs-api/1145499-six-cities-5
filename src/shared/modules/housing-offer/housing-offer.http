@@ -3,12 +3,12 @@
 ## Получить предложения об аренде по идентификатору
 
 GET http://localhost:4000/offers/653e5329de95d8bcffbb8fc5 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5OTA0NDIwMCwiZXhwIjoxNjk5MjE3MDAwfQ.3kOuHho5CHD4fE0e4qHcNykb-PthYKxLOzv5_yeviIE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDZhNjViNDJiMjgyYmU3NmJmMzMwMSIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTEyODk0OSwiZXhwIjoxNjk5MzAxNzQ5fQ.R0Gj9V-D3E222q67lRKZoUeYFVrWm6fxpv1P9ev6ghE
 ###
 
-## Получить список предложения об аренде
+## Получить список предложений об аренде
 GET http://localhost:4000/offers HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5OTA0NDIwMCwiZXhwIjoxNjk5MjE3MDAwfQ.3kOuHho5CHD4fE0e4qHcNykb-PthYKxLOzv5_yeviIE
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDZhNjViNDJiMjgyYmU3NmJmMzMwMSIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTEyODk0OSwiZXhwIjoxNjk5MzAxNzQ5fQ.R0Gj9V-D3E222q67lRKZoUeYFVrWm6fxpv1P9ev6ghE
 
 ###
 
@@ -58,13 +58,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwM
 ## Получить список избранных предложений об аренде
 
 GET  http://localhost:4000/offers/favorites/all HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5OTA0NDIwMCwiZXhwIjoxNjk5MjE3MDAwfQ.3kOuHho5CHD4fE0e4qHcNykb-PthYKxLOzv5_yeviIE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDZhNjViNDJiMjgyYmU3NmJmMzMwMSIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTEyODk0OSwiZXhwIjoxNjk5MzAxNzQ5fQ.R0Gj9V-D3E222q67lRKZoUeYFVrWm6fxpv1P9ev6ghE
 
 ###
 
 ## Добавить (удалить) предложение об аренде в(из) Favorites
 
-PATCH  http://localhost:4000/offers/65240b1c17ba3f4be9b99de0/favorites HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5OTA0NDIwMCwiZXhwIjoxNjk5MjE3MDAwfQ.3kOuHho5CHD4fE0e4qHcNykb-PthYKxLOzv5_yeviIE
+PATCH  http://localhost:4000/offers/6546a58072d31b9ba6869050/favorites HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDZhNjViNDJiMjgyYmU3NmJmMzMwMSIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTEyODk0OSwiZXhwIjoxNjk5MzAxNzQ5fQ.R0Gj9V-D3E222q67lRKZoUeYFVrWm6fxpv1P9ev6ghE
+
+###
+
+## Получить список премиальных предложений об аренде
+
+GET  http://localhost:4000/offers/premium/Hamburg HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDZhNjViNDJiMjgyYmU3NmJmMzMwMSIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTEyODk0OSwiZXhwIjoxNjk5MzAxNzQ5fQ.R0Gj9V-D3E222q67lRKZoUeYFVrWm6fxpv1P9ev6ghE
 
 ###

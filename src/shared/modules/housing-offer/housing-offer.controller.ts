@@ -19,6 +19,7 @@ import { CreateHousingOfferDto } from './dto/create-housing-offer.dto.js';
 import { UpdateHousingOfferDto } from './dto/update-housing-offer.dto.js';
 import { CreateOfferRequest } from './types/create-offer-request.type.js';
 import { ParamOfferId } from './types/param-offerid.type.js';
+import { ParamCity } from './types/param-city.type.js';
 
 @injectable()
 export class HousingOfferController extends BaseController {
@@ -88,6 +89,12 @@ export class HousingOfferController extends BaseController {
       handler: this.toggleFavorite,
       middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateFavoriteDto)],
     });
+
+    this.addRoute({
+      path: '/premium/:city',
+      method: HttpMethod.Get,
+      handler: this.getPremium,
+    });
   }
 
   public async index({ tokenPayload }: Request, res: Response) {
@@ -150,5 +157,21 @@ export class HousingOfferController extends BaseController {
     const result = await this.favoriteService.toggle({ ...body, userId: tokenPayload.id });
 
     this.ok(res, fillDTO(FavoriteRdo, result));
+  }
+
+  public async getPremium(
+    { tokenPayload, params }: Request<ParamCity>,
+    res: Response,
+  ): Promise<void> {
+    const { city } = params;
+    let offers = [];
+
+    if (tokenPayload) {
+      offers = await this.offerService.findPremiumWithCredentials(city, tokenPayload.id);
+    } else {
+      offers = await this.offerService.findPremium(city);
+    }
+
+    this.ok(res, fillDTO(HousingOfferRdo, offers));
   }
 }

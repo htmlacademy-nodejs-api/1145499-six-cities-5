@@ -31,6 +31,9 @@ export class HousingOfferEntity extends defaultClasses.TimeStamps {
   @prop({ default: false })
   public isPremium: boolean;
 
+  @prop({ default: false })
+  public isFavorite: boolean;
+
   @prop({ required: true })
   public type: HousingType;
 
