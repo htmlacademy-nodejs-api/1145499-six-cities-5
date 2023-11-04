@@ -1,5 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { types } from '@typegoose/typegoose';
 import {
   BaseController,
   HttpMethod,
@@ -7,6 +9,7 @@ import {
   PrivateRouteMiddleware,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
+  HttpError,
 } from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -20,6 +23,7 @@ import { UpdateHousingOfferDto } from './dto/update-housing-offer.dto.js';
 import { CreateOfferRequest } from './types/create-offer-request.type.js';
 import { ParamOfferId } from './types/param-offerid.type.js';
 import { ParamCity } from './types/param-city.type.js';
+import { HousingOfferEntity } from './housing-offer.entity.js';
 
 @injectable()
 export class HousingOfferController extends BaseController {
@@ -29,6 +33,8 @@ export class HousingOfferController extends BaseController {
     private readonly offerService: IHousingOfferService,
     @inject(Component.CommentService) private readonly commentService: ICommentService,
     @inject(Component.FavoriteService) private readonly favoriteService: IFavoriteService,
+    @inject(Component.HousingOfferModel)
+    private readonly offerModel: types.ModelType<HousingOfferEntity>,
   ) {
     super(logger);
 
@@ -130,21 +136,38 @@ export class HousingOfferController extends BaseController {
   }
 
   public async update(
-    { body, params }: Request<ParamOfferId, unknown, UpdateHousingOfferDto>,
+    { body, params, tokenPayload }: Request<ParamOfferId, unknown, UpdateHousingOfferDto>,
     res: Response,
   ): Promise<void> {
-    const updatedOffer = await this.offerService.updateById(params.offerId, body);
+    const { offerId } = params;
+
+    const offer = await this.offerModel.findById(offerId);
+
+    if (offer?.userId.toString() !== tokenPayload.id) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'You can only update your own documents');
+    }
+
+    const updatedOffer = await this.offerService.updateById(offerId, body);
 
     this.ok(res, fillDTO(HousingOfferRdo, updatedOffer));
   }
 
-  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+  public async delete(
+    { params, tokenPayload }: Request<ParamOfferId>,
+    res: Response,
+  ): Promise<void> {
     const { offerId } = params;
-    const offer = await this.offerService.deleteById(offerId);
 
+    const offer = await this.offerModel.findById(offerId);
+
+    if (offer?.userId.toString() !== tokenPayload.id) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'You can only delete your own documents');
+    }
+
+    await this.offerService.deleteById(offerId);
     await this.commentService.deleteByOfferId(offerId);
 
-    this.noContent(res, offer);
+    this.noContent(res, null);
   }
 
   public async getFavorites({ tokenPayload }: Request, res: Response): Promise<void> {
