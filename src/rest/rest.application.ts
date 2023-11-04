@@ -15,11 +15,14 @@ export class RestApplication {
     @inject(Component.Logger) private readonly logger: ILogger,
     @inject(Component.Config) private readonly config: IConfig<RestSchema>,
     @inject(Component.DatabaseClient) private readonly databaseClient: IDatabaseClient,
-    @inject(Component.ExceptionFilter) private readonly defaultExceptionFilter: IExceptionFilter,
+    @inject(Component.ExceptionFilter) private readonly appExceptionFilter: IExceptionFilter,
     @inject(Component.UserController) private readonly userController: IController,
     @inject(Component.HousingOfferController) private readonly housingOfferController: IController,
     @inject(Component.CommentController) private readonly commentController: IController,
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: IExceptionFilter,
+    @inject(Component.HttpExceptionFilter) private readonly httpExceptionFilter: IExceptionFilter,
+    @inject(Component.ValidationExceptionFilter)
+    private readonly validationExceptionFilter: IExceptionFilter,
   ) {
     this.server = express();
   }
@@ -57,7 +60,9 @@ export class RestApplication {
 
   private async _initExceptionFilters() {
     this.server.use(this.authExceptionFilter.catch.bind(this.authExceptionFilter));
-    this.server.use(this.defaultExceptionFilter.catch.bind(this.defaultExceptionFilter));
+    this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
+    this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
+    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
   }
 
   public async init() {

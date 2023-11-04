@@ -4,7 +4,12 @@ import { Component } from '../shared/types/index.js';
 import { ILogger, PinoLogger } from '../shared/libs/logger/index.js';
 import { IConfig, RestConfig, RestSchema } from '../shared/libs/config/index.js';
 import { IDatabaseClient, MongoDatabaseClient } from '../shared/libs/database-client/index.js';
-import { DefaultExceptionFilter, IExceptionFilter } from '../shared/libs/rest/index.js';
+import {
+  AppExceptionFilter,
+  IExceptionFilter,
+  ValidationExceptionFilter,
+} from '../shared/libs/rest/index.js';
+import { HttpErrorExceptionFilter } from '../shared/libs/rest/exception-filter/http-error.exception-filter.js';
 
 export function createRestApplicationContainer() {
   const contaiter = new Container();
@@ -18,7 +23,15 @@ export function createRestApplicationContainer() {
     .inSingletonScope();
   contaiter
     .bind<IExceptionFilter>(Component.ExceptionFilter)
-    .to(DefaultExceptionFilter)
+    .to(AppExceptionFilter)
+    .inSingletonScope();
+  contaiter
+    .bind<IExceptionFilter>(Component.HttpExceptionFilter)
+    .to(HttpErrorExceptionFilter)
+    .inSingletonScope();
+  contaiter
+    .bind<IExceptionFilter>(Component.ValidationExceptionFilter)
+    .to(ValidationExceptionFilter)
     .inSingletonScope();
 
   return contaiter;
