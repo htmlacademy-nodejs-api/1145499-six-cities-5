@@ -15,9 +15,6 @@ const MAX_ROOMS = 8;
 const MIN_GUESTS = 1;
 const MAX_GUESTS = 10;
 
-const MIN_COMMENTS = 1;
-const MAX_COMMENTS = 5;
-
 export class TSVOfferGenerator implements IOfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
 
@@ -28,7 +25,7 @@ export class TSVOfferGenerator implements IOfferGenerator {
     const previewPhoto = getRandomItem(this.mockData.previewPhotos);
     const photos = getRandomItems(this.mockData.photos).join(';');
     const isPremium = getRandomItem(['true', 'false']);
-    const isFavorite = getRandomItem(['true', 'false']);
+    const isFavorite = false;
     const rating = generateRandomValue(MIN_RATING, MAX_RATING).toString();
     const type = getRandomItem(this.mockData.housingTypes);
     const rooms = generateRandomValue(MIN_ROOMS, MAX_ROOMS).toString();
@@ -38,9 +35,9 @@ export class TSVOfferGenerator implements IOfferGenerator {
     const userName = getRandomItem(this.mockData.userNames);
     const userEmail = getRandomItem(this.mockData.emails);
     const userAvatar = getRandomItem(this.mockData.avatars);
-    const userPassword = '********';
+    const userPassword = 'Passw0rd!23';
     const userType = getRandomItem(Object.keys(UserType));
-    const commentsCount = generateRandomValue(MIN_COMMENTS, MAX_COMMENTS).toString();
+    const commentsCount = 0;
     const latitude = CitiesMap[city as keyof typeof CitiesMap]?.latitude;
     const longitude = CitiesMap[city as keyof typeof CitiesMap]?.longitude;
 

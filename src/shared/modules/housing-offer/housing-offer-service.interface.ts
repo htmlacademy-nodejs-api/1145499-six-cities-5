@@ -7,12 +7,14 @@ import { DocumentExists } from '../../types/index.js';
 export interface IHousingOfferService extends DocumentExists {
   create(dto: CreateHousingOfferDto): Promise<DocumentType<HousingOfferEntity>>;
   findById(offerId: string): Promise<DocumentType<HousingOfferEntity> | null>;
+  findByIdWithCredentials(offerId: string, userId: string): Promise<DocumentType<HousingOfferEntity> | null>;
   find(count?: number): Promise<DocumentType<HousingOfferEntity>[]>;
+  findWithCredentials(userId: string, count?: number): Promise<DocumentType<HousingOfferEntity>[]>;
+  findFavorites(userId: string, count?: number): Promise<DocumentType<HousingOfferEntity>[]>;
   deleteById(offerId: string): Promise<DocumentType<HousingOfferEntity> | null>;
   updateById(
     offerId: string,
     dto: UpdateHousingOfferDto,
   ): Promise<DocumentType<HousingOfferEntity> | null>;
   incCommentCount(offerId: string): Promise<DocumentType<HousingOfferEntity> | null>;
-  exists(documentId: string): Promise<boolean>;
 }
