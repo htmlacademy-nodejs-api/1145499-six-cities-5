@@ -23,7 +23,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwM
 
 POST http://localhost:4000/offers HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5ODY0MjIyNCwiZXhwIjoxNjk4ODE1MDI0fQ.hzhY8kbAYqYgihVifglbtlGM5Cq1-owkn2Qt8bUla-o
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1M2MzODM4ODVhMmY0ZjE0MzcwMmJhOSIsImVtYWlsIjoidG9yYW5zQG92ZXJsb29rLm5ldCIsImlhdCI6MTY5OTA0NDIwMCwiZXhwIjoxNjk5MjE3MDAwfQ.3kOuHho5CHD4fE0e4qHcNykb-PthYKxLOzv5_yeviIE
 
 {
   "title": "Дом на берегу озера 3",
