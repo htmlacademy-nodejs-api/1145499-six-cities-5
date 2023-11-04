@@ -12,7 +12,7 @@ import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ICommentService } from '../comment/index.js';
-import { IFavoriteService, CreateFavoriteDto, FavoriteRdo } from '../favorite/index.js';
+import { IFavoriteService, FavoriteRdo } from '../favorite/index.js';
 import { IHousingOfferService } from './housing-offer-service.interface.js';
 import { HousingOfferRdo } from './rdo/housing-offer.rdo.js';
 import { CreateHousingOfferDto } from './dto/create-housing-offer.dto.js';
@@ -87,7 +87,7 @@ export class HousingOfferController extends BaseController {
       path: '/:offerId/favorites',
       method: HttpMethod.Patch,
       handler: this.toggleFavorite,
-      middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateFavoriteDto)],
+      middlewares: [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('offerId')],
     });
 
     this.addRoute({
@@ -153,8 +153,13 @@ export class HousingOfferController extends BaseController {
     this.ok(res, fillDTO(HousingOfferRdo, offers));
   }
 
-  public async toggleFavorite({ body, tokenPayload }: Request, res: Response): Promise<void> {
-    const result = await this.favoriteService.toggle({ ...body, userId: tokenPayload.id });
+  public async toggleFavorite(
+    { params, tokenPayload }: Request<ParamOfferId>,
+    res: Response,
+  ): Promise<void> {
+    const { offerId } = params;
+
+    const result = await this.favoriteService.toggle({ offerId, userId: tokenPayload.id });
 
     this.ok(res, fillDTO(FavoriteRdo, result));
   }

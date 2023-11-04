@@ -300,11 +300,6 @@ export class HousingOfferService implements IHousingOfferService {
           },
         },
         { $unset: ['comments'] },
-        // {
-        //   $match: {
-        //     isPremium: true,
-        //   },
-        // },
         {
           $match: {
             $expr: {
@@ -366,11 +361,6 @@ export class HousingOfferService implements IHousingOfferService {
           },
         },
         { $unset: ['comments', 'favorites'] },
-        // {
-        //   $match: {
-        //     isPremium: true,
-        //   },
-        // },
         {
           $match: {
             $expr: {
