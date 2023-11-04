@@ -112,7 +112,7 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
     return data;
   });
 
-export const fetchUserStatus = createAsyncThunk<UserAuth['email'], undefined, { extra: Extra }>(
+export const fetchUserStatus = createAsyncThunk<User, undefined, { extra: Extra }>(
   Action.FETCH_USER_STATUS,
   async (_, { extra }) => {
     const { api } = extra;
@@ -120,7 +120,7 @@ export const fetchUserStatus = createAsyncThunk<UserAuth['email'], undefined, { 
     try {
       const { data } = await api.get<User>(ApiRoute.Login);
 
-      return data.email;
+      return data;
     } catch (error) {
       const axiosError = error as AxiosError;
 
@@ -132,24 +132,25 @@ export const fetchUserStatus = createAsyncThunk<UserAuth['email'], undefined, { 
     }
   });
 
-export const loginUser = createAsyncThunk<UserAuth['email'], UserAuth, { extra: Extra }>(
+export const loginUser = createAsyncThunk<User, UserAuth, { extra: Extra }>(
   Action.LOGIN_USER,
   async ({ email, password }, { extra }) => {
     const { api, history } = extra;
     const { data } = await api.post<User & { token: string }>(ApiRoute.Login, { email, password });
-    const { token } = data;
+    const { token, ...rest } = data;
 
     Token.save(token);
     history.push(AppRoute.Root);
 
-    return email;
+    return rest;
   });
 
 export const logoutUser = createAsyncThunk<void, undefined, { extra: Extra }>(
   Action.LOGOUT_USER,
   async (_, { extra }) => {
-    const { api } = extra;
-    await api.delete(ApiRoute.Logout);
+    // TODO: backlog
+    // const { api } = extra;
+    // await api.delete(ApiRoute.Logout);
 
     Token.drop();
   });
@@ -167,7 +168,7 @@ export const registerUser = createAsyncThunk<void, UserRegister, { extra: Extra 
     if (avatar) {
       const payload = new FormData();
       payload.append('avatar', avatar);
-      await api.post(`/${data.id}${ApiRoute.Avatar}`, payload, {
+      await api.post(`users/${data.id}${ApiRoute.Avatar}`, payload, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
     }

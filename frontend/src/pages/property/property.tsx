@@ -25,7 +25,7 @@ import {
 } from '../../store/site-data/selectors';
 import { getUser } from '../../store/user-process/selectors';
 import Bookmark from '../../components/bookmark/bookmark';
-import { AppRoute, UserType } from '../../const';
+import { AppRoute } from '../../const';
 
 const Property = (): JSX.Element | null => {
   const params = useParams();
@@ -77,8 +77,8 @@ const Property = (): JSX.Element | null => {
     city,
     location,
   } = offer;
-  const isAuthor = host.email === user;
-  const isPro = host.type === UserType.Pro;
+  const isAuthor = host.email === user?.email;
+  const isPro = host.type === user?.type;
 
   const locations = premiumOffers.map(
     ({ id: premiumId, location: premiumLocation }) => ({
@@ -183,7 +183,7 @@ const Property = (): JSX.Element | null => {
                   >
                     <img
                       className="property__avatar user__avatar"
-                      src={host.avatarUrl}
+                      src={host.avatar}
                       width={74}
                       height={74}
                       alt={host.name}

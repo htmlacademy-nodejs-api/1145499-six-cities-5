@@ -16,7 +16,7 @@ export type City = {
 
 export type User = {
   name: string;
-  avatarUrl: string;
+  avatar: string;
   type: UserType;
   email: string;
 };
@@ -68,5 +68,5 @@ export type UserAuth = Pick<User, 'email'> & { password: string };
 export type CommentAuth = NewComment &
   Pick<Offer, 'id'>;
 export type FavoriteAuth = Offer['id'];
-export type UserRegister = Omit<User, 'avatarUrl'> &
+export type UserRegister = Omit<User, 'avatar'> &
   Pick<UserAuth, 'password'> & { avatar?: File };
