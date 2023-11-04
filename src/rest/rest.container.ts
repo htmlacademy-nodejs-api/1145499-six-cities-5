@@ -10,6 +10,7 @@ import {
   ValidationExceptionFilter,
 } from '../shared/libs/rest/index.js';
 import { HttpErrorExceptionFilter } from '../shared/libs/rest/exception-filter/http-error.exception-filter.js';
+import { PathTransformer } from '../shared/libs/rest/transform/path-transformer.js';
 
 export function createRestApplicationContainer() {
   const contaiter = new Container();
@@ -33,6 +34,7 @@ export function createRestApplicationContainer() {
     .bind<IExceptionFilter>(Component.ValidationExceptionFilter)
     .to(ValidationExceptionFilter)
     .inSingletonScope();
+  contaiter.bind<PathTransformer>(Component.PathTransformer).to(PathTransformer).inSingletonScope();
 
   return contaiter;
 }
