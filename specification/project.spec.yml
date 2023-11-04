@@ -191,6 +191,8 @@ paths:
                 $ref: "#/components/schemas/authToken"
         "401":
           description: Неверный логин или пароль.
+        "404":
+          description: Пользователь не найден.
 
     get:
       tags:
@@ -208,7 +210,7 @@ paths:
         "401":
           description: Пользователь не авторизован.
 
-  /users/registration:
+  /users/register:
     post:
       tags:
         - users
@@ -314,13 +316,17 @@ components:
 
         password:
           type: string
-          example: 12345678
+          example: Passw0rd!23
 
     # пользователь
     user:
       type: object
 
       properties:
+        id:
+          type: string
+          example: 6546884e831089a4d7a755db
+
         name:
           type: string
           example: Tyrion Lannister
@@ -342,9 +348,25 @@ components:
       type: object
 
       properties:
+        id:
+          type: string
+          example: 6546884e831089a4d7a755db
+
+        name:
+          type: string
+          example: Tyrion Lannister
+
         email:
           type: string
           example: tyrion@lannister.local
+
+        avatar:
+          type: string
+          example: "tyrion.jpg"
+
+        type:
+          type: string
+          example: standart
 
         token:
           type: string

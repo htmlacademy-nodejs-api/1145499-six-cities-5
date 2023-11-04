@@ -7,6 +7,7 @@ import {
   HttpMethod,
   PrivateRouteMiddleware,
   ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware,
   UploadFileMiddleware,
 } from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
@@ -33,7 +34,7 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({
-      path: '/registration',
+      path: '/register',
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [new ValidateDtoMiddleware(CreateUserDto)],
@@ -45,11 +46,11 @@ export class UserController extends BaseController {
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
     });
     this.addRoute({
-      path: '/avatar',
+      path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
-        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('userId'),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ],
     });
@@ -84,9 +85,10 @@ export class UserController extends BaseController {
     this.ok(res, Object.assign(responseData, { token }));
   }
 
-  public async uploadAvatar({ tokenPayload, file }: Request, res: Response) {
+  public async uploadAvatar({ params, file }: Request, res: Response) {
+    const { userId } = params;
     const uploadFile = { avatar: file?.filename };
-    const updatedUser = await this.userService.updateById(tokenPayload.id, uploadFile);
+    const updatedUser = await this.userService.updateById(userId, uploadFile);
     this.ok(res, fillDTO(UserRdo, updatedUser));
   }
 
