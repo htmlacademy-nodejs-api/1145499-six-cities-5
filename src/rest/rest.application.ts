@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import express, { Express } from 'express';
+import cors from 'cors';
 import { ILogger } from '../shared/libs/logger/index.js';
 import { IConfig, RestSchema } from '../shared/libs/config/index.js';
 import { IDatabaseClient } from '../shared/libs/database-client/index.js';
@@ -49,6 +50,7 @@ export class RestApplication {
   private async _initMiddleware() {
     const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
 
+    this.server.use(cors());
     this.server.use(express.json());
     this.server.use(STATIC_UPLOAD_ROUTE, express.static(this.config.get('UPLOAD_DIRECTORY')));
     this.server.use(STATIC_FILES_ROUTE, express.static(this.config.get('STATIC_DIRECTORY_PATH')));
