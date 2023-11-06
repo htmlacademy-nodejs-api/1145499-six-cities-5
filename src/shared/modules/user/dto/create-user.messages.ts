@@ -7,12 +7,12 @@ export const CreateUserMessages = {
     invalidFormat: 'email must be a valid address',
   },
   avatar: {
-    invalidFormat: 'avatar is required',
+    invalidFormat: 'avatar must be a string',
   },
   password: {
     invalidFormat: 'password is required',
     lengthField: 'min length for password is 6, max is 12',
   },
 
-  type: { invalid: 'type must be "pro" or "standart"' },
+  type: { invalid: 'type must be "pro" or "regular"' },
 } as const;

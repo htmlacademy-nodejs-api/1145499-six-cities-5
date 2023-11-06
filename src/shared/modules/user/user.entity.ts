@@ -14,13 +14,13 @@ export interface UserEntity extends defaultClasses.Base {}
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({ type: String, minlength: 1, maxlength: 15, required: true })
+  @prop({ type: () => String, minlength: 1, maxlength: 15, required: true })
   public name;
 
-  @prop({ type: String, unique: true, required: true })
+  @prop({ type: () => String, unique: true, required: true })
   public email;
 
-  @prop({ type: String, required: false, default: DEFAULT_AVATAR_FILE_NAME })
+  @prop({ type: () => String, required: false, default: DEFAULT_AVATAR_FILE_NAME })
   public avatar;
 
   @prop({
@@ -29,7 +29,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   })
   public type;
 
-  @prop({ type: String, required: true })
+  @prop({ type: () => String, required: true })
   public password: string;
 
   constructor(userData: User) {

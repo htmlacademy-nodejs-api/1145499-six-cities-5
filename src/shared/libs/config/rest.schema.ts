@@ -11,10 +11,10 @@ export type RestSchema = {
   DB_PASSWORD: string;
   DB_PORT: string;
   DB_NAME: string;
-  UPLOAD_DIRECTORY: string;
   JWT_SECRET: string;
   HOST: string;
   STATIC_DIRECTORY_PATH: string;
+  UPLOAD_DIRECTORY_PATH: string;
 };
 
 export const configRestSchema = convict<RestSchema>({
@@ -60,12 +60,6 @@ export const configRestSchema = convict<RestSchema>({
     env: 'DB_NAME',
     default: null,
   },
-  UPLOAD_DIRECTORY: {
-    doc: 'Directory for upload files',
-    format: String,
-    env: 'UPLOAD_DIRECTORY',
-    default: null,
-  },
   JWT_SECRET: {
     doc: 'Secret for sign JWT',
     format: String,
@@ -83,5 +77,11 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'STATIC_DIRECTORY_PATH',
     default: 'static',
+  },
+  UPLOAD_DIRECTORY_PATH: {
+    doc: 'Directory for upload files',
+    format: String,
+    env: 'UPLOAD_DIRECTORY_PATH',
+    default: null,
   },
 });

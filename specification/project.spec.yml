@@ -46,13 +46,13 @@ paths:
         required: true
 
       responses:
-        "200":
+        "201":
           description: Предложение об аренде успешно создано.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/createdOffer"
-        "403":
+        "401":
           description: Создавать предложения об аренде могут только авторизованные пользователи.
 
   /offers/{offerId}:
@@ -92,7 +92,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/offer"
 
-        "403":
+        "401":
           description: Редактировать можно только свои предложения.
 
     delete:
@@ -104,10 +104,10 @@ paths:
       responses:
         "204":
           description: Предложение об аренде успешно удалено.
-        "403":
+        "401":
           description: Удалять можно только свои предложения.
 
-  /offers/premium:
+  /offers/premium/{city}:
     get:
       tags:
         - offers
@@ -124,7 +124,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/offer"
 
-  /offers/favorite:
+  /offers/favorites/all:
     get:
       tags:
         - offers
@@ -140,31 +140,20 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/offer"
-        "403":
+        "401":
           description: Список избранных предложений доступен только авторизованным пользователям.
 
+  /offers/{offerId}/favorites:
     patch:
       tags:
         - offers
       summary: Изменение статуса Избранное предложения
       description: Измененяет статус Избранное предложения.
 
-      requestBody:
-        description: Информация для редактирования предложения об аренде.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                offerId:
-                  type: string
-                  example: 65211e7e615961c0f4cbefe8
-        required: true
-
       responses:
         "204":
           description: Статус предложения Избранное успешно изменён.
-        "403":
+        "401":
           description: Изменять статус может только авторизованный пользователь.
 
   /users/login:
@@ -188,9 +177,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/authToken"
+                $ref: "#/components/schemas/loggedUser"
         "401":
           description: Неверный логин или пароль.
+        "404":
+          description: Пользователь не найден.
 
     get:
       tags:
@@ -208,7 +199,7 @@ paths:
         "401":
           description: Пользователь не авторизован.
 
-  /users/registration:
+  /users/register:
     post:
       tags:
         - users
@@ -314,13 +305,17 @@ components:
 
         password:
           type: string
-          example: 12345678
+          example: Passw0rd!23
 
     # пользователь
     user:
       type: object
 
       properties:
+        id:
+          type: string
+          example: 6546884e831089a4d7a755db
+
         name:
           type: string
           example: Tyrion Lannister
@@ -337,14 +332,30 @@ components:
           type: string
           example: standart
 
-    # авторизационный токен
-    authToken:
+    # авторизованный пользователь
+    loggedUser:
       type: object
 
       properties:
+        id:
+          type: string
+          example: 6546884e831089a4d7a755db
+
+        name:
+          type: string
+          example: Tyrion Lannister
+
         email:
           type: string
           example: tyrion@lannister.local
+
+        avatar:
+          type: string
+          example: "tyrion.jpg"
+
+        type:
+          type: string
+          example: standart
 
         token:
           type: string

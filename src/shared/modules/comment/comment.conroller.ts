@@ -13,6 +13,7 @@ import {
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
+import { IUserService } from '../user/user-service.interface.js';
 import { IHousingOfferService } from '../housing-offer/index.js';
 import { ICommentService } from './comment-service.interface.js';
 import { CommentRdo } from './rdo/comment.rdo.js';
@@ -24,6 +25,8 @@ export class CommentController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: ILogger,
     @inject(Component.CommentService) private readonly commentService: ICommentService,
+    @inject(Component.UserService)
+    private readonly userService: IUserService,
     @inject(Component.HousingOfferService) private readonly offerService: IHousingOfferService,
   ) {
     super(logger);
@@ -37,6 +40,8 @@ export class CommentController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.userService, 'User', 'token'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
         new ValidateDtoMiddleware(CreateCommentDto),
       ],
     });
