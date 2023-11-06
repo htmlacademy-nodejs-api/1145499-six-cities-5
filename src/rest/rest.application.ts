@@ -52,7 +52,7 @@ export class RestApplication {
 
     this.server.use(cors());
     this.server.use(express.json());
-    this.server.use(STATIC_UPLOAD_ROUTE, express.static(this.config.get('UPLOAD_DIRECTORY')));
+    this.server.use(STATIC_UPLOAD_ROUTE, express.static(this.config.get('UPLOAD_DIRECTORY_PATH')));
     this.server.use(STATIC_FILES_ROUTE, express.static(this.config.get('STATIC_DIRECTORY_PATH')));
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
   }
