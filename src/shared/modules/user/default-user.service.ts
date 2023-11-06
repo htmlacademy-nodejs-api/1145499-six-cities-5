@@ -44,4 +44,8 @@ export class DefaultUserService implements IUserService {
   ): Promise<DocumentType<UserEntity> | null> {
     return this.userModel.findByIdAndUpdate(userId, dto, { new: true }).exec();
   }
+
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.userModel.exists({ _id: documentId })) !== null;
+  }
 }

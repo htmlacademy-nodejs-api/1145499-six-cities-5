@@ -4,7 +4,7 @@
 
 POST http://localhost:4000/comments/654779e3944e6cd87dab4ce4 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDc3YTY0MWM0NTIxZDg5ZWMyOGQ5MCIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTE4MzIxNywiZXhwIjoxNjk5MzU2MDE3fQ.5pjvnmVJPJLB84XE-nsWdFlrkoRDMr8ZF7LMtL-atVM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY1NDZjNWM5NmJhNWE1Y2U1MmIzYTY2YyIsImVtYWlsIjoiam9obkBnb2x0Lm5ldCIsImlhdCI6MTY5OTEzNjk4MiwiZXhwIjoxNjk5MzA5NzgyfQ.B-KpsMSrMt1J47YteF8BfLD_4Ge9088HjiPRSO0HqqU
 
 {
   "text": "Good house",

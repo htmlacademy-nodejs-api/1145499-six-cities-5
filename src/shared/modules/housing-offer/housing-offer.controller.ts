@@ -14,6 +14,7 @@ import {
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
+import { IUserService } from '../user/user-service.interface.js';
 import { ICommentService } from '../comment/index.js';
 import { IFavoriteService, FavoriteRdo } from '../favorite/index.js';
 import { IHousingOfferService } from './housing-offer-service.interface.js';
@@ -29,6 +30,8 @@ import { HousingOfferEntity } from './housing-offer.entity.js';
 export class HousingOfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected logger: ILogger,
+    @inject(Component.UserService)
+    private readonly userService: IUserService,
     @inject(Component.HousingOfferService)
     private readonly offerService: IHousingOfferService,
     @inject(Component.CommentService) private readonly commentService: ICommentService,
@@ -93,7 +96,12 @@ export class HousingOfferController extends BaseController {
       path: '/:offerId/favorites',
       method: HttpMethod.Patch,
       handler: this.toggleFavorite,
-      middlewares: [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.userService, 'User', 'token'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+      ],
     });
 
     this.addRoute({

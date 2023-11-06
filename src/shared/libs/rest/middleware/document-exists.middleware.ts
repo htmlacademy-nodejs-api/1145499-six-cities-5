@@ -11,8 +11,12 @@ export class DocumentExistsMiddleware implements IMiddleware {
     private readonly paramName: string,
   ) {}
 
-  public async execute({ params }: Request, _res: Response, next: NextFunction): Promise<void> {
-    const documentId = params[this.paramName];
+  public async execute(
+    { params, tokenPayload }: Request,
+    _res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const documentId = this.paramName === 'token' ? tokenPayload.id : params[this.paramName];
     if (!(await this.service.exists(documentId))) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
